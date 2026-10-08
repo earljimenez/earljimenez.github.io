@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Earl John Jimenez · QA Automation</title>
+<meta name="description" content="Senior QA Automation Engineer with 8+ years of experience. Playwright, TypeScript, AI-assisted testing, Azure DevOps CI/CD. Open to remote senior, SDET and consulting roles.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07090f;
+    --bg-2: #0c1019;
+    --surface: rgba(255, 255, 255, .035);
+    --surface-hover: rgba(255, 255, 255, .06);
+    --border: rgba(255, 255, 255, .08);
+    --border-strong: rgba(255, 255, 255, .16);
+    --text: #eef1f7;
+    --muted: #97a0b3;
+    --accent: #7c8cff;
+    --accent-2: #3ee6c1;
+    --pass: #3ee6a0;
+    --grid: rgba(255, 255, 255, .035);
+    --term-bg: #0b0f17;
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f7fb;
+    --bg-2: #eef0f6;
+    --surface: rgba(255, 255, 255, .75);
+    --surface-hover: #ffffff;
+    --border: rgba(16, 22, 40, .08);
+    --border-strong: rgba(16, 22, 40, .16);
+    --text: #111627;
+    --muted: #5b6478;
+    --accent: #4a57e8;
+    --accent-2: #0ea888;
+    --pass: #12a36b;
+    --grid: rgba(16, 22, 40, .045);
+    --term-bg: #0b0f17;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #f6f7fb;
+      --bg-2: #eef0f6;
+      --surface: rgba(255, 255, 255, .75);
+      --surface-hover: #ffffff;
+      --border: rgba(16, 22, 40, .08);
+      --border-strong: rgba(16, 22, 40, .16);
+      --text: #111627;
+      --muted: #5b6478;
+      --accent: #4a57e8;
+      --accent-2: #0ea888;
+      --pass: #12a36b;
+      --grid: rgba(16, 22, 40, .045);
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  /* backdrop: grid + glow */
+  .backdrop { position: absolute; inset: 0 0 auto 0; height: 980px; pointer-events: none; z-index: 0; overflow: hidden; }
+  .backdrop::before {
+    content: ""; position: absolute; inset: 0;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);
+  }
+  .glow { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .45; }
+  .glow.a { width: 520px; height: 520px; background: var(--accent); top: -160px; left: -120px; opacity: .28; }
+  .glow.b { width: 460px; height: 460px; background: var(--accent-2); top: 80px; right: -140px; opacity: .2; }
+
+  /* nav */
+  nav { position: sticky; top: 0; z-index: 20; backdrop-filter: blur(14px); background: color-mix(in srgb, var(--bg) 70%, transparent); border-bottom: 1px solid var(--border); }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: "Space Grotesk", sans-serif; font-weight: 600; letter-spacing: -.01em; }
+  .logo { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; font-size: 13px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+  .nav-right { display: flex; align-items: center; gap: 26px; font-size: 14px; }
+  .nav-right a { color: var(--muted); transition: color .2s; }
+  .nav-right a:hover { color: var(--text); }
+  .theme-btn { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; display: grid; place-items: center; }
+  .theme-btn svg { width: 17px; height: 17px; }
+  @media (max-width: 760px) { .nav-right a { display: none; } }
+
+  /* hero */
+  .hero { position: relative; z-index: 1; padding: 88px 0 40px; display: grid; grid-template-columns: 1.08fr .92fr; gap: 48px; align-items: center; }
+  @media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding-top: 56px; } }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--surface); font-size: 13px; color: var(--muted); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--pass); box-shadow: 0 0 0 0 var(--pass); animation: pulse 2.2s infinite; }
+  @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--pass) 60%, transparent); } 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+  h1 { font-family: "Space Grotesk", sans-serif; font-size: clamp(38px, 5.6vw, 64px); line-height: 1.04; letter-spacing: -.035em; font-weight: 700; margin-top: 22px; }
+  .grad { background: linear-gradient(100deg, var(--accent) 10%, var(--accent-2) 90%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lede { font-size: 18px; color: var(--muted); margin-top: 20px; max-width: 560px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-weight: 600; font-size: 15px; border: 1px solid var(--border-strong); background: var(--surface); transition: transform .2s, border-color .2s, background .2s; }
+  .btn:hover { transform: translateY(-2px); border-color: var(--accent); }
+  .btn.primary { border: 0; color: #fff; background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 55%, var(--accent-2))); box-shadow: 0 10px 30px -10px var(--accent); }
+  .btn svg { width: 16px; height: 16px; }
+
+  /* terminal */
+  .term { border-radius: 16px; background: var(--term-bg); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 30px 80px -30px rgba(0,0,0,.6), 0 0 0 1px rgba(124,140,255,.08); overflow: hidden; font-family: "JetBrains Mono", monospace; font-size: 13px; color: #cfd6e6; }
+  .term-bar { display: flex; align-items: center; gap: 7px; padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,.07); background: rgba(255,255,255,.02); }
+  .term-bar i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+  .term-bar span { margin-left: 10px; color: #7d869a; font-size: 12px; }
+  .term-body { padding: 18px 18px 20px; line-height: 1.85; min-height: 286px; }
+  .term-body .line { opacity: 0; transform: translateY(4px); animation: show .35s forwards; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .term-body .prompt { color: #7c8cff; }
+  .term-body .ok { color: #3ee6a0; }
+  .term-body .dim { color: #6d7689; }
+  .term-body .sum { color: #3ee6a0; font-weight: 500; }
+  .caret { display: inline-block; width: 8px; height: 15px; background: #cfd6e6; vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+  @keyframes show { to { opacity: 1; transform: none; } }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* stats */
+  .stats { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 36px 0 24px; }
+  @media (max-width: 760px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  .stat { padding: 22px; border-radius: 16px; border: 1px solid var(--border); background: var(--surface); }
+  .stat b { font-family: "Space Grotesk", sans-serif; font-size: 34px; letter-spacing: -.03em; display: block; line-height: 1.1; }
+  .stat span { font-size: 13px; color: var(--muted); }
+
+  /* sections */
+  section { position: relative; z-index: 1; padding: 84px 0 8px; }
+  .kicker { font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+  h2 { font-family: "Space Grotesk", sans-serif; font-size: clamp(28px, 3.6vw, 40px); letter-spacing: -.03em; line-height: 1.1; margin-top: 10px; }
+  .sub { color: var(--muted); margin-top: 12px; max-width: 620px; }
+
+  /* bento */
+  .bento { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-top: 36px; }
+  .tile { grid-column: span 3; position: relative; padding: 28px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); transition: transform .3s, border-color .3s, background .3s; overflow: hidden; }
+  .tile.wide { grid-column: span 6; }
+  .tile:hover { transform: translateY(-3px); border-color: var(--border-strong); background: var(--surface-hover); }
+  .tile::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: linear-gradient(140deg, color-mix(in srgb, var(--accent) 55%, transparent), transparent 40%, transparent 70%, color-mix(in srgb, var(--accent-2) 45%, transparent)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity .3s; pointer-events: none; }
+  .tile:hover::after { opacity: 1; }
+  @media (max-width: 860px) { .tile { grid-column: span 6; } }
+  .tile-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .icon { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--accent); }
+  .icon svg { width: 21px; height: 21px; }
+  .num { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--muted); }
+  .tile h3 { font-family: "Space Grotesk", sans-serif; font-size: 21px; letter-spacing: -.02em; margin-top: 20px; line-height: 1.25; }
+  .tile p { color: var(--muted); margin-top: 10px; font-size: 15px; }
+  .tile ul { list-style: none; margin-top: 16px; display: grid; gap: 10px; }
+  .tile li { position: relative; padding-left: 24px; font-size: 15px; color: var(--text); opacity: .9; }
+  .tile li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--pass); font-family: "JetBrains Mono", monospace; font-size: 13px; }
+  .tile.wide ul { grid-template-columns: repeat(2, 1fr); column-gap: 28px; }
+  @media (max-width: 860px) { .tile.wide ul { grid-template-columns: 1fr; } }
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 20px; }
+  .chip { font-family: "JetBrains Mono", monospace; font-size: 12px; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border); background: color-mix(in srgb, var(--surface) 60%, transparent); color: var(--muted); }
+
+  /* services */
+  .services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 36px; }
+  @media (max-width: 860px) { .services { grid-template-columns: 1fr; } }
+  .svc { padding: 26px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); }
+  .svc .num { display: block; margin-bottom: 18px; color: var(--accent-2); }
+  .svc h3 { font-family: "Space Grotesk", sans-serif; font-size: 19px; letter-spacing: -.02em; }
+  .svc p { color: var(--muted); margin-top: 8px; font-size: 15px; }
+
+  /* timeline */
+  .timeline { margin-top: 36px; position: relative; }
+  .timeline::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(var(--accent), var(--accent-2) 60%, transparent); opacity: .5; }
+  .job { position: relative; padding: 0 0 30px 40px; }
+  .job::before { content: ""; position: absolute; left: 0; top: 6px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+  .job:first-child::before { background: var(--accent); box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 22%, transparent); }
+  .job .when { font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--muted); }
+  .job h3 { font-family: "Space Grotesk", sans-serif; font-size: 19px; letter-spacing: -.01em; margin-top: 2px; }
+  .job .org { color: var(--accent-2); font-size: 14px; font-weight: 500; }
+  .job p { color: var(--muted); margin-top: 6px; max-width: 760px; font-size: 15px; }
+
+  /* skills */
+  .skills { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 36px; }
+  @media (max-width: 960px) { .skills { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .skills { grid-template-columns: 1fr; } }
+  .skill { padding: 22px; border-radius: 18px; border: 1px solid var(--border); background: var(--surface); }
+  .skill h3 { font-family: "JetBrains Mono", monospace; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .skill .chips { margin-top: 14px; }
+  .skill .chip { color: var(--text); }
+
+  /* contact */
+  .cta { position: relative; margin-top: 8px; padding: 56px 32px; border-radius: 28px; text-align: center; overflow: hidden; border: 1px solid var(--border-strong); background: radial-gradient(ellipse at 20% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 55%), radial-gradient(ellipse at 90% 100%, color-mix(in srgb, var(--accent-2) 22%, transparent), transparent 55%), var(--bg-2); }
+  .cta h2 { margin-top: 10px; }
+  .cta .sub { margin: 12px auto 0; }
+  .cta .actions { justify-content: center; }
+  footer { position: relative; z-index: 1; padding: 44px 0 52px; color: var(--muted); font-size: 13px; text-align: center; }
+
+  /* scroll reveal */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .term-body .line { animation: none; opacity: 1; transform: none; }
+    .dot, .caret { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="backdrop"><div class="glow a"></div><div class="glow b"></div></div>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#"><span class="logo">EJ</span>Earl John Jimenez</a>
+    <div class="nav-right">
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+      <button class="theme-btn" id="themeBtn" aria-label="Toggle light and dark theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <span class="pill"><span class="dot"></span>Open to remote senior QA automation, SDET and consulting roles</span>
+      <h1>Test automation that catches real defects, <span class="grad">AI-augmented.</span></h1>
+      <p class="lede">I build Playwright and TypeScript frameworks that teams can trust and maintain, and I use AI agents to write, review and triage tests without lowering the bar. 8+ years across financial services, airline, and enterprise software products. Based in Metro Manila (UTC+8).</p>
+      <div class="actions">
+        <a class="btn primary" href="mailto:earljimenez29@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>Get in touch</a>
+        <a class="btn" href="assets/Earl_John_Jimenez_CV.pdf" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Download CV</a>
+        <a class="btn" href="https://www.linkedin.com/in/earljohn-jimenez" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.75h4V21H3V9.75Zm7 0h3.8v1.6h.06c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.77 2.65 4.77 6.1V21h-4v-4.9c0-1.17-.02-2.68-1.63-2.68-1.64 0-1.89 1.28-1.89 2.6V21h-4V9.75Z"/></svg>LinkedIn</a>
+      </div>
+    </div>
+
+    <div class="term" aria-hidden="true">
+      <div class="term-bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span>~/qa-suite</span></div>
+      <div class="term-body">
+        <div class="line" style="animation-delay:.2s"><span class="prompt">$</span> npx playwright test --shard=1/4</div>
+        <div class="line dim" style="animation-delay:.6s">Running tests using 4 workers</div>
+        <div class="line" style="animation-delay:1.0s"><span class="ok">✓</span> contracts › create and post a purchase order <span class="dim">(4.2s)</span></div>
+        <div class="line" style="animation-delay:1.35s"><span class="ok">✓</span> reports › totals match the database <span class="dim">(6.8s)</span></div>
+        <div class="line" style="animation-delay:1.7s"><span class="ok">✓</span> reports › Excel export matches the screen <span class="dim">(5.1s)</span></div>
+        <div class="line" style="animation-delay:2.05s"><span class="ok">✓</span> access › out-of-scope record is denied <span class="dim">(1.3s)</span></div>
+        <div class="line" style="animation-delay:2.4s"><span class="ok">✓</span> invoices › payment updates the balance <span class="dim">(3.9s)</span></div>
+        <div class="line" style="animation-delay:2.9s">&nbsp;</div>
+        <div class="line sum" style="animation-delay:3.1s">  All tests passed · report merged across shards</div>
+        <div class="line" style="animation-delay:3.4s"><span class="prompt">$</span> <span class="caret"></span></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="stats reveal">
+    <div class="stat"><b>8+</b><span>years in test automation</span></div>
+    <div class="stat"><b>1,000+</b><span>automated tests maintained</span></div>
+    <div class="stat"><b>4</b><span>business applications owned</span></div>
+    <div class="stat"><b>5</b><span>companies, 3 automation stacks</span></div>
+  </div>
+
+  <section id="work">
+    <div class="reveal">
+      <div class="kicker">Selected work</div>
+      <h2>What I've built</h2>
+      <p class="sub">Client and employer code stays private, so these describe what I built and why it mattered.</p>
+    </div>
+    <div class="bento">
+      <article class="tile wide reveal">
+        <div class="tile-head">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+          <span class="num">01</span>
+        </div>
+        <h3>Enterprise Playwright framework for four business applications</h3>
+        <p>Owned test automation for a construction contract and project-valuation platform, a financial aid and grant management system, a document data-entry tool and an insurance policyholder portal.</p>
+        <ul>
+          <li>More than 1,000 automated tests on a Page Object Model framework with reusable components, fixtures and centralized test data: about 830 for the contract platform, 220 regression and release tests for the financial aid system, 160 BDD scenarios (Playwright + Cucumber) for the insurance customer portal, and 80 end-to-end and API tests for the document data-entry tool.</li>
+          <li>Typed API clients for the checks a UI can't prove, such as role-based permissions and concurrency conflicts.</li>
+          <li>Runs in Azure DevOps pipelines across development, test, release and production environments.</li>
+        </ul>
+        <div class="chips"><span class="chip">Playwright</span><span class="chip">TypeScript</span><span class="chip">Cucumber</span><span class="chip">Azure Pipelines</span><span class="chip">API testing</span></div>
+      </article>
+
+      <article class="tile reveal">
+        <div class="tile-head">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></div>
+          <span class="num">02</span>
+        </div>
+        <h3>AI-assisted QA toolkit</h3>
+        <p>Led my team's adoption of agentic AI testing with reusable Claude Code skills and specialized agents.</p>
+        <ul>
+          <li>Agents that draft tests to project standards, review changes before merge, and triage CI failures to a root cause.</li>
+          <li>A second agent challenges every bug verdict before it is logged.</li>
+          <li>Standards that keep AI-written tests asserting correct behavior instead of being adjusted to pass.</li>
+        </ul>
+        <div class="chips"><span class="chip">Claude Code</span><span class="chip">GitHub Copilot</span><span class="chip">AI agents</span></div>
+      </article>
+
+      <article class="tile reveal">
+        <div class="tile-head">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
+          <span class="num">03</span>
+        </div>
+        <h3>Value-level report validation</h3>
+        <p>Financial reports checked figure by figure, not just "does the page load".</p>
+        <ul>
+          <li>Expected values derived from the database and verified against on-screen reports and Excel exports.</li>
+          <li>Mutation checks prove each assertion catches a real defect.</li>
+          <li>Surfaced calculation defects before they reached customers.</li>
+        </ul>
+        <div class="chips"><span class="chip">SQL Server</span><span class="chip">Data validation</span><span class="chip">Excel exports</span></div>
+      </article>
+
+      <article class="tile wide reveal">
+        <div class="tile-head">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></div>
+          <span class="num">04</span>
+        </div>
+        <h3>Faster, more readable pipeline runs</h3>
+        <p>Made a growing end-to-end suite quicker to run and easier to read when it fails.</p>
+        <ul>
+          <li>Sharded Playwright runs across parallel pipeline agents, then merged the results into one HTML report across shards and stages.</li>
+          <li>Added a step decorator to page-object methods so every report reads as plain business steps.</li>
+          <li>Stabilized flaky tests after a major Angular upgrade and removed redundant trace uploads from the pipeline.</li>
+          <li>Added access-control coverage for route guards that must deny unauthorized users.</li>
+        </ul>
+        <div class="chips"><span class="chip">Test sharding</span><span class="chip">Merged reports</span><span class="chip">Azure Pipelines</span><span class="chip">Flaky test fixes</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="reveal">
+      <div class="kicker">Services</div>
+      <h2>How I can help your team</h2>
+      <p class="sub">Available as a remote contractor or for senior roles.</p>
+    </div>
+    <div class="services">
+      <div class="svc reveal"><span class="num">01 /</span><h3>Build or modernize a framework</h3><p>A Playwright + TypeScript framework your team can extend: page objects, fixtures, test data, API layer and CI from day one.</p></div>
+      <div class="svc reveal"><span class="num">02 /</span><h3>Stabilize a flaky suite</h3><p>Root-cause timing, data and environment problems instead of adding retries, so a red build means something again.</p></div>
+      <div class="svc reveal"><span class="num">03 /</span><h3>Introduce AI-assisted testing</h3><p>Set up AI coding agents for test authoring, review and failure triage, with guardrails that keep quality high.</p></div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="reveal">
+      <div class="kicker">Experience</div>
+      <h2>Where I've worked</h2>
+    </div>
+    <div class="timeline">
+      <div class="job reveal"><div class="when">2023 – Present</div><h3>Senior Software QA Engineer</h3><div class="org">Nelnet Philippines</div><p>Own test automation for four web applications and lead the team's adoption of AI-assisted testing.</p></div>
+      <div class="job reveal"><div class="when">2021 – 2023</div><h3>Senior QA Automation Engineer</h3><div class="org">FLNT</div><p>Pioneered test automation with Robot Framework (keyword-driven, data-driven, BDD) across UI, API and database layers, running in parallel on Azure Pipelines.</p></div>
+      <div class="job reveal"><div class="when">2019 – 2021</div><h3>QA Automation Specialist</h3><div class="org">MUSIC Tribe</div><p>Introduced the team's first automated suite (Robot Framework, Selenium) for web and mobile, run through GitHub Actions.</p></div>
+      <div class="job reveal"><div class="when">2018 – 2019</div><h3>Software Quality Assurance Engineer</h3><div class="org">Navitaire, an Amadeus company</div><p>Built a data-driven C# automation framework with SQL Server validation for an airline revenue-accounting system, running daily in CI/CD.</p></div>
+      <div class="job reveal"><div class="when">2016 – 2018</div><h3>Application Developer</h3><div class="org">IBM</div><p>Developed and supported COBOL business applications, including production troubleshooting and root-cause analysis.</p></div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="reveal">
+      <div class="kicker">Skills</div>
+      <h2>Toolbox</h2>
+    </div>
+    <div class="skills">
+      <div class="skill reveal"><h3>Test automation</h3><div class="chips"><span class="chip">Playwright</span><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">Cucumber (BDD)</span><span class="chip">Robot Framework</span><span class="chip">Selenium</span><span class="chip">C#</span><span class="chip">Page Object Model</span></div></div>
+      <div class="skill reveal"><h3>Testing types</h3><div class="chips"><span class="chip">End-to-end</span><span class="chip">Regression</span><span class="chip">API</span><span class="chip">Accessibility (WCAG)</span><span class="chip">Data validation</span><span class="chip">Cross-browser</span></div></div>
+      <div class="skill reveal"><h3>AI-assisted QA</h3><div class="chips"><span class="chip">Claude Code</span><span class="chip">GitHub Copilot</span><span class="chip">AI agents</span><span class="chip">Prompt engineering</span></div></div>
+      <div class="skill reveal"><h3>CI/CD and tools</h3><div class="chips"><span class="chip">Azure DevOps</span><span class="chip">GitHub Actions</span><span class="chip">Bitbucket</span><span class="chip">Postman</span><span class="chip">Bruno</span><span class="chip">SQL Server</span></div></div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="cta reveal">
+      <div class="kicker">Contact</div>
+      <h2>Let's talk</h2>
+      <p class="sub">Hiring for QA automation or need a contractor to get your test suite in shape? I usually reply within a day.</p>
+      <div class="actions">
+        <a class="btn primary" href="mailto:earljimenez29@gmail.com">earljimenez29@gmail.com</a>
+        <a class="btn" href="https://www.linkedin.com/in/earljohn-jimenez" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="assets/Earl_John_Jimenez_CV.pdf" target="_blank" rel="noopener">CV (PDF)</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>© 2026 Earl John Jimenez · Metro Manila, Philippines</footer>
+
+<script>
+  // Theme toggle (remembered per visitor; the page works without storage)
+  (function () {
+    var root = document.documentElement;
+    try { var saved = localStorage.getItem('theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+    document.getElementById('themeBtn').addEventListener('click', function () {
+      var current = root.getAttribute('data-theme') ||
+        (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      var next = current === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+
+  // Reveal sections as they scroll into view
+  (function () {
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) { items.forEach(function (el) { el.classList.add('in'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+</body>
+</html>
